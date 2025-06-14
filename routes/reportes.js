@@ -39,12 +39,15 @@ router.post('/reportes', upload.single('foto'), async (req, res, next) => {
     // Guardar solo el nombre del archivo, la ruta base se manejará en el frontend
     reporte.fotoUrl = req.file.filename;
     //las medidas vienen como JSON.stringify, pasar a numero
-    const medidas = JSON.parse(req.body.medidas);
-    reporte.medidas = {
-      alto: parseFloat(medidas.alto),
-      ancho: parseFloat(medidas.ancho),
-      largo: parseFloat(medidas.largo)
-    };
+    //verificar que vienen y que sea en formato JSON para poder parsear
+    if (req.body.medidas && typeof req.body.medidas === 'string') {
+      const medidas = JSON.parse(req.body.medidas);
+      reporte.medidas = {
+        alto: parseFloat(medidas.alto),
+        ancho: parseFloat(medidas.ancho),
+        largo: parseFloat(medidas.largo)
+      };
+    }
     reporte.ubicacion = {
       type: 'Point',
       coordinates: ubicacion
