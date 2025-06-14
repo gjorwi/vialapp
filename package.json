@@ -1,0 +1,36 @@
+{
+  "name": "apivial",
+  "version": "1.0.0",
+  "description": "Aplicación para reportar averías en la vía pública",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "api",
+    "express",
+    "mongodb",
+    "mongoose",
+    "vialactivo"
+  ],
+  "author": "jorwi",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8"
+  }
+}
