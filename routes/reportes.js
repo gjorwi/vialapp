@@ -14,14 +14,16 @@ const validateObjectId = (req, res, next) => {
   }
   next();
 };
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
+const cloudinary = require('cloudinary').v2;
+
+// Configuración de Cloudinary
+cloudinary.config({
+  cloud_name: 'dxjfo6whd',
+  api_key: '896638362276395',
+  api_secret: 'j0JKXPGg-Dzq6e5CL8Iez26jHkw',
 });
+
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage, fileFilter: (req, file, cb) => {
   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
     cb(null, true);
@@ -36,8 +38,19 @@ router.post('/reportes', upload.single('foto'), async (req, res, next) => {
     //los datos de ubicacion vienen con JSON.stringify y en formato [longitud, latitud]
     const ubicacion = JSON.parse(req.body.ubicacion);
     const reporte = new Reporte(req.body);
-    // Guardar solo el nombre del archivo, la ruta base se manejará en el frontend
-    reporte.fotoUrl = req.file.filename;
+    if (req.file) {
+      try {
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+        const result = await cloudinary.uploader.upload(dataURI, {
+          folder: "evidencias",
+        });
+        reporte.fotoUrl = result.secure_url;
+      } catch (uploadError) {
+        console.error('Error al subir a Cloudinary:', uploadError);
+        return next(new Error('Error al subir la imagen a Cloudinary'));
+      }
+    }
     //las medidas vienen como JSON.stringify, pasar a numero
     //verificar que vienen y que sea en formato JSON para poder parsear
     if (req.body.medidas && typeof req.body.medidas === 'string') {
