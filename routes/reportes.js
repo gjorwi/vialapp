@@ -124,16 +124,6 @@ router.get('/reportes/cercanos', async (req, res, next) => {
     next(error);
   }
 });
-// export const getReportsInBounds = async (neLat, neLng, swLat, swLng) => {
-//   try {
-//     const params = new URLSearchParams({ neLat, neLng, swLat, swLng });
-//     const response = await axios.get(`${API_BASE_URL}/reportes/en-area?${params.toString()}`);
-//     return response.data;
-//   } catch (error) {
-//     console.error('Error al obtener reportes en el área:', error);
-//     throw new Error('No se pudieron cargar los reportes en el área visible');
-//   }
-// };
 //ruta para realizar la busqueda de reportes por area
 router.get('/reportes/en-area', async (req, res, next) => {
   try {

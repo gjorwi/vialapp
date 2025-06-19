@@ -68,10 +68,19 @@ const reporteSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  calle: {
+  direccion: {
     type: String,
   },
   municipio: {
+    type: String,
+  },
+  parroquia: {
+    type: String,
+  },
+  ciudad: {
+    type: String,
+  },
+  ubiCompleta: {
     type: String,
   },
   fotoUrl: {
