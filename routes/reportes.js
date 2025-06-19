@@ -92,9 +92,11 @@ router.get('/reportes', async (req, res, next) => {
 // Rutas específicas que deben ir antes que las parametrizadas
 
 // Buscar reportes cercanos a una ubicación
-router.get('/reportes/cercanos', async (req, res, next) => {
+router.post('/reportes/cercanos', async (req, res, next) => {
   try {
-    const { lat, lng, radius = 10000 } = req.query; // distancia en metros por defecto 10km
+    console.log('Parametros de la consulta:', req.body);
+    
+    const { lat, lng, radius = 10000 } = req.body; // distancia en metros por defecto 10km
     
     if (!lat || !lng) {
       return res.status(400).json({
@@ -102,6 +104,7 @@ router.get('/reportes/cercanos', async (req, res, next) => {
         error: 'Se requieren latitud y longitud como parámetros de consulta'
       });
     }
+    console.log('Preparando la consulta para obtener reportes cercanos');
     
     const reportes = await Reporte.find({
       ubicacion: {

@@ -111,4 +111,7 @@ reporteSchema.methods.toJSON = function() {
 
 const Reporte = mongoose.model('Reporte', reporteSchema);
 
+// Asegurar creación de índices (incluido 2dsphere)
+Reporte.createIndexes();
+
 module.exports = Reporte;
