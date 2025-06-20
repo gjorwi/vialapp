@@ -7,6 +7,7 @@ const path = require('path');
 
 // Importar rutas
 const reportesRouter = require('./routes/reportes');
+const loginAdmin = require('./routes/loginAdmin');
 
 // Inicializar la aplicación Express
 const app = express();
