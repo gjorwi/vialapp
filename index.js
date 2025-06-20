@@ -35,6 +35,8 @@ app.get('/', (req, res) => {
 
 // Rutas de la API (versión 1)
 app.use('/api/v1/', reportesRouter);
+//ruta para loguear un administrador
+app.use('/api/v1/admin', loginAdmin);
 
 // Middleware para manejar rutas no encontradas (404)
 app.use((req, res, next) => {
