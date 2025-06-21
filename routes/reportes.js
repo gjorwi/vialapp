@@ -65,6 +65,28 @@ router.post('/reportes', upload.single('foto'), async (req, res, next) => {
       type: 'Point',
       coordinates: ubicacion
     };
+
+    // Verificar si ya existe una avería del mismo tipo a menos de 15 metros
+    const reporteCercano = await Reporte.findOne({
+      tipo: reporte.tipo,
+      ubicacion: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: ubicacion
+          },
+          $maxDistance: 15 // metros
+        }
+      }
+    });
+
+    if (reporteCercano) {
+      return res.status(200).json({
+        success: false,
+        error: 'Ya existe una avería del mismo tipo registrada en esta área.'
+      });
+    }
+
     await reporte.save();
     res.status(201).json({
       success: true,
@@ -241,6 +263,35 @@ router.delete('/reportes/:id', validateObjectId, async (req, res, next) => {
     next(error);
   }
 });
+
+// Cambiar estatus del reporte
+router.put('/reportes/cambiar-estatus/:id', validateObjectId, async (req, res, next) => {
+  try {
+    const reporte = await Reporte.updateOne(
+      { _id: req.params.id },
+      { estado: req.body.estatus },
+      {
+        new: true,
+        runValidators: true
+      }
+    );
+
+    if (!reporte) {
+      return res.status(404).json({
+        success: false,
+        error: 'Reporte no encontrado'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: reporte
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 
 module.exports = router;

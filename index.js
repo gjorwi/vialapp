@@ -8,7 +8,7 @@ const path = require('path');
 // Importar rutas
 const reportesRouter = require('./routes/reportes');
 const loginAdmin = require('./routes/loginAdmin');
-
+const estadisticasRouter = require('./routes/estadisticas');
 // Inicializar la aplicación Express
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +38,8 @@ app.get('/', (req, res) => {
 app.use('/api/v1/', reportesRouter);
 //ruta para loguear un administrador
 app.use('/api/v1/admin', loginAdmin);
+//ruta para obtener estadisticas
+app.use('/api/v1/dashboard', estadisticasRouter);
 
 // Middleware para manejar rutas no encontradas (404)
 app.use((req, res, next) => {
@@ -146,20 +148,20 @@ const startServer = async () => {
   }
 };
 
-// Manejar excepciones no capturadas
-process.on('uncaughtException', (error) => {
-  console.error('Excepción no capturada:', error);
-  process.exit(1);
-});
+// // Manejar excepciones no capturadas
+// process.on('uncaughtException', (error) => {
+//   console.error('Excepción no capturada:', error);
+//   process.exit(1);
+// });
 
-// Manejar rechazos de promesas no manejados
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Rechazo de promesa no manejado:');
-  console.error('Promesa:', promise);
-  console.error('Razón:', reason);
-  // Cerrar servidor y salir
-  process.exit(1);
-});
+// // Manejar rechazos de promesas no manejados
+// process.on('unhandledRejection', (reason, promise) => {
+//   console.error('Rechazo de promesa no manejado:');
+//   console.error('Promesa:', promise);
+//   console.error('Razón:', reason);
+//   // Cerrar servidor y salir
+//   process.exit(1);
+// });
 
 // Iniciar la aplicación
 startServer();

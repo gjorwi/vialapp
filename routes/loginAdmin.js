@@ -3,25 +3,30 @@ const router = express.Router();
 const UserAdmin = require('../models/userAdmin');
 const jwt = require('jsonwebtoken');
 
-router.get('/register', (req, res) => {
-    const email = 'root@root.com';
+router.get('/register', async (req, res) => {
+    const email = 'jgjg0503@gmail.com';
     const newUser = new UserAdmin({ email: email });
-    newUser.save((err, user) => {
-        if (err) {
-            return res.status(500).json({ success: false, authentication: null, error: 'Error al iniciar la app' });
+    try {
+        const resultFindEmail = await UserAdmin.findOne({ email });
+        if (resultFindEmail) {
+            return res.status(200).json({ success: true, authentication: null, error: null });
         }
+        const result= await newUser.save();
+        console.log(JSON.stringify(result, null, 2));
         res.json({ success: true, authentication: null, error: null });
-    });
+    } catch (error) {
+        console.log(JSON.stringify(error, null, 2));
+        res.json({ success: false, authentication: null, error: error });
+    }
 })
 
-router.get('/userByEmail', (req, res) => {
-  const { email } = req.query;
-  UserAdmin.findOne({ email }, (err, user) => {
-    if (err) {
-      return res.status(500).json({ success: false, authentication: null, error: 'Error al buscar el usuario' });
-    }
+router.post('/userByEmail', async (req, res) => {
+  const { email } = req.body;
+  console.log('Email:', email);
+  try {
+    const user = await UserAdmin.findOne({ email });
     if (!user) {
-      return res.status(401).json({ success: false, authentication: null, error: 'Credenciales inválidas' });
+      return res.json({ success: false, authentication: null, error: null, message: 'El usuario no es un administrador' });
     }
     console.log('User found:', user);
     if(user){
@@ -29,11 +34,14 @@ router.get('/userByEmail', (req, res) => {
             if (err) {
                 return res.status(500).json({ success: false, authentication: null, error: 'Error al generar el token' });
             }
-            res.json({ success: true, authentication: { token: token }, error: null });
+            res.json({ success: true, authentication: { token: token }, error: null, message: 'Usuario encontrado' });
         });
     }
     
-  });
-});
+  } catch (error) {
+    console.log(JSON.stringify(error, null, 2));
+    res.json({ success: false, authentication: null, error: error, message: 'Error al buscar el usuario' });
+  }
+})
 
 module.exports = router;
