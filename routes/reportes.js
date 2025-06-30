@@ -61,6 +61,18 @@ router.post('/reportes', upload.single('foto'), async (req, res, next) => {
         largo: parseFloat(medidas.largo)
       };
     }
+    //las cantidades vienen como JSON.stringify, pasar a numero
+    //verificar que vienen y que sea en formato JSON para poder parsear
+    if (req.body.cantidadTrafficLight && typeof req.body.cantidadTrafficLight === 'string') {
+      const cantidadTrafficLight = JSON.parse(req.body.cantidadTrafficLight);
+      reporte.cantidadTrafficLight = parseFloat(cantidadTrafficLight);
+    }
+    //las cantidades vienen como JSON.stringify, pasar a numero
+    //verificar que vienen y que sea en formato JSON para poder parsear
+    if (req.body.cantidadLight && typeof req.body.cantidadLight === 'string') {
+      const cantidadLight = JSON.parse(req.body.cantidadLight);
+      reporte.cantidadLight = parseFloat(cantidadLight);
+    }
     reporte.ubicacion = {
       type: 'Point',
       coordinates: ubicacion

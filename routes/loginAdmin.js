@@ -32,9 +32,9 @@ router.post('/userByEmail', async (req, res) => {
     if(user){
         jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) {
-                return res.status(500).json({ success: false, authentication: null, error: 'Error al generar el token' });
+                return res.status(200).json({ success: false, authentication: null, error: 'Error al generar el token' });
             }
-            res.json({ success: true, authentication: { token: token }, error: null, message: 'Usuario encontrado' });
+            res.status(200).json({ success: true, authentication: { token: token }, error: null, message: 'Usuario encontrado' });
         });
     }
     

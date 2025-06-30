@@ -52,6 +52,36 @@ const reporteSchema = new mongoose.Schema({
     enum: ['pothole', 'traffic_light', 'light', 'other'],
     default: 'other'
   },
+  vialidad: {
+    type: String,
+    enum: ['carretera_nacional', 'avenida_principal', 'troncal', 'calle_principal', 'calle'],
+    default: 'other'
+  },
+  nivel: {
+    type: String,
+    enum: ['alto', 'medio', 'bajo'],
+    default: 'medio'
+  },
+  cantidadTrafficLight: {
+    type: Number,
+    default: 0,
+    validate: {
+      validator: function(v) {
+        return v >= 0;
+      },
+      message: 'La cantidad de semáforos debe ser mayor o igual a 0'
+    }
+  },
+  cantidadLight: {
+    type: Number,
+    default: 0,
+    validate: {
+      validator: function(v) {
+        return v >= 0;
+      },
+      message: 'La cantidad de lamparas debe ser mayor o igual a 0'
+    }
+  },
   fechaReporte: {
     type: Date,
     default: Date.now
